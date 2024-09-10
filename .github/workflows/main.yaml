@@ -1,0 +1,38 @@
+name: Complete DevSecOps CI/CD pipeline
+
+on: push
+
+jobs:
+  sast-scan:
+    runs-on: ubuntu-latest
+    name: Run SonarQube with Maven
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: Build with Maven and analyze with SonarQube
+        run:  mvn -B verify sonar:sonar -Dsonar.projectKey=sonardemotesting -Dsonar.organization=sonardemotesting -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  sca-scan:
+    needs: sast-scan
+    runs-on: ubuntu-latest
+    name: Maven using Snyk security scan
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven@master
+        continue-on-error: true 
+        with:
+          snyk-token: ${{ secrets.SNYK_TOKEN }}
