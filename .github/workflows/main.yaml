@@ -3,7 +3,7 @@ name: Complete DevSecOps CI/CD pipeline
 on: 
   push:
     branches:
-      - master
+      - "master"
 
 jobs:
   sast-scan:
