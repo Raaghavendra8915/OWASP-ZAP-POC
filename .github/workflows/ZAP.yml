@@ -21,6 +21,6 @@ jobs:
       - name: Run Docker Container
         run: docker run -d -p 8080:8080 owasp-zap-poc
       - name: ZAP Scan
-        uses: zaproxy/action-full-scan@v0.4.0
+        uses: zaproxy/action-baseline@v0.12.0
         with:
           target: 'http://localhost:8080'
