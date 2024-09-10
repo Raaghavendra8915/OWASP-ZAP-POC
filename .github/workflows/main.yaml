@@ -36,3 +36,16 @@ jobs:
         continue-on-error: true 
         with:
           snyk-token: ${{ secrets.SNYK_TOKEN }}
+
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Scan the webapplication
+    steps:
+      - name: Build Image
+        run: docker build -t owasp-zap-poc .
+      - name: Run Docker Container
+        run: docker run -d -p 8080:8080 owasp-zap-poc
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: 'http://localhost:8080'
