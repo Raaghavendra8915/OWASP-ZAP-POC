@@ -89,6 +89,8 @@ jobs:
           IMAGE_TAG: 1.0.0
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker build -t owasp-zap-poc .
+          docker tag owasp-zap-poc $REGISTRY/$REPOSITORY:$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
              
 
