@@ -38,6 +38,7 @@ jobs:
           snyk-token: ${{ secrets.SNYK_TOKEN }}
 
   zap_scan:
+    needs: sca-scan
     runs-on: ubuntu-latest
     name: Scan the webapplication
     steps:
