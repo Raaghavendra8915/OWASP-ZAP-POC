@@ -1,6 +1,6 @@
 name: ZAP Scan
 
-on: push
+#on: push
   
 
 jobs:
