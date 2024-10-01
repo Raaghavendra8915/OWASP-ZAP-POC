@@ -1,0 +1,42 @@
+name: Deploy website
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4.2.0
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint code
+        run: npm run lint
+      - name: Test code
+        run: npm run test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci
+      - name: Build website
+        run: npm run build
+      - name: upload artifact
+        uses: actions/upload-artifact@v3.2.1-node20
+        with:
+          name: firstfile
+          path: path1
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: get build artifacts
+        uses: actions/download-artifact@v3
+
+      - name: List Files
+        run: ls -R
+          
